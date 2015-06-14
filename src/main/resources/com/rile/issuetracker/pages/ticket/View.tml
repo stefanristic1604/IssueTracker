@@ -1,0 +1,249 @@
+<html t:type="layout" title="${ticket.title}"
+      t:sidebarTitle="Framework Version"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter"> 
+    <div class="container">
+        <h1 style="float: left; font-size: 20px; margin: 0;">
+            <span class="glyphicon glyphicon-file" style="left: 0; top: 7px; line-height: 32px; margin-top: -10px; color: #bbb; font-size: 1.5em;" aria-hidden="true"></span>
+            <span>&nbsp;</span>
+            <span>
+                <t:pagelink page="ticket/View" context="${ticket.id}"><span>[#${ticket.id}] ${ticket.title}</span></t:pagelink>
+            </span>
+        </h1>          
+    
+        <ul class="header-actions" style="float: right; margin: 0 -10px 0 0;">
+            <li>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default btn-sm btn-default-gradient">
+                        <span class="glyphicon glyphicon-eye-open"></span> ${ticket.views}
+                    </button>
+                </div>
+            </li>
+            <t:if test="loggedIn">
+            <li>               
+                <div class="btn-group">
+                    <t:actionlink t:id="followTicket" t:context="ticket.id" class="btn btn-default btn-sm btn-default-gradient ${getActiveFor('userFollowingTicket')}">
+                        <span class="glyphicon glyphicon-star"></span>
+                        <t:if test="ticketFollower"> Unfollow</t:if> 
+                        <t:if test="!ticketFollower"> Follow</t:if> 
+                    </t:actionlink>
+                    <t:actionlink class="btn btn-default btn-sm text-hover">
+                        <span>${ticketFollowerDao.getFollowerCountByTicketId(ticket.id)}</span>
+                    </t:actionlink>
+                </div>
+            </li>
+            </t:if>
+        </ul>
+    </div>
+
+    <hr />
+
+    <!-- ticket body -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2">
+                <img class="ticket-page-avatar" src="${context:images/avatars}/${getUserAvatar(ticket.userId)}" />
+                <div style="text-align: center;">
+                <t:pagelink page="user/View" context="ticket.userId.id"> ${ticket.userId.username}</t:pagelink><br />
+                <span class="glyphicon glyphicon-calendar" style="color: #bbb;"></span> ${util.getDateOrTimeFrom(ticket.userId.dateTimeRegistered, 0)} 
+                </div>
+            </div>
+            <div class="col-md-8" style="min-height: 265px;">
+                <div class="panel panel-default">
+                    <div class="panel-heading">${ticket.userId.username} posted on ${util.getDateOrTimeFrom(ticket.dateTimeCreated, 0)}</div>
+                    <div class="panel-body">
+                        <t:outputraw value="${getSafeText(ticket.description)}" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <!--<h5 style="text-align: center;">Actions</h5>--> 
+                <t:if test="loggedIn">
+                    <t:pagelink page="ticket/Create" type="button" class="btn btn-default btn-sm btn-default-gradient btn-block"> 
+                        <span class="glyphicon glyphicon-file" aria-hidden="true"></span> New Ticket
+                    </t:pagelink>
+                    <t:if test="hasPriviligiesToCRD">
+                    <t:pagelink page="ticket/Edit" context="ticket.id" type="button" class="btn btn-default btn-sm btn-default-gradient btn-block"> 
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit Ticket
+                    </t:pagelink>
+                    <t:actionlink t:id="deleteTicket" context="ticket.id" class="btn btn-default btn-sm btn-default-gradient btn-block"> 
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete Ticket
+                    </t:actionlink>
+                    </t:if>
+                    <hr />
+                </t:if>
+                <t:if test="hasPriviligiesToCRD">
+                    <div class="btn-group" style="width: 100%">
+                        <button type="button" class="btn btn-default btn-sm data-toggle" style="width: 100%" data-toggle="dropdown" aria-expanded="false" title="&#60; Project">
+                            <span class="glyphicon glyphicon-book" aria-hidden="true"></span> ${ticket.projectId.title} <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <t:loop source="projectDao.loadAll()" value="projectP1">
+                                <li>
+                                <t:actionlink t:id="selectProject" t:context="[ticket.id, projectP1]">
+                                    ${projectP1.title}
+                                </t:actionlink>
+                                </li>
+                            </t:loop>
+                        </ul>
+                    </div>
+                </t:if>
+                <t:if test="!hasPriviligiesToCRD">
+                    <div class="btn-group" style="width: 100%">
+                        <button type="button" class="btn btn-default btn-sm data-toggle" style="width: 100%" data-toggle="dropdown" aria-expanded="false" title="&#60; Project">
+                            <span class="glyphicon glyphicon-book" aria-hidden="true"></span> ${ticket.projectId.title}
+                        </button>
+                    </div>
+                </t:if>
+                <hr />
+                <t:if test="hasPriviligiesToEditStatusPriority">
+                    <!-- btn-group > Status -->
+                    <div class="btn-group" style="width: 100%; margin-top: 5px;">
+                        <button type="button" class="btn btn-${util.getStatusColor(ticketStatus)} btn-sm data-toggle" style="width: 100%" data-toggle="dropdown" aria-expanded="false" title="&#60; Status">
+                            ${ticketStatus} <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <t:loop source="statusEnums" value="statusP1">
+                                <li>
+                                <t:actionlink t:id="selectStatus" t:context="[ticket.id, statusP1]" class="label label-${util.getStatusColor(statusP1)}">
+                                    ${statusP1}
+                                </t:actionlink>
+                                </li>
+                            </t:loop>
+                        </ul>
+                    </div><br />
+                    <!-- btn-group > Priority -->
+                    <div class="btn-group" style="width: 100%; margin-top: 5px;">
+                        <button type="button" class="btn btn-${util.getPriorityColor(ticketPriority)} btn-sm data-toggle" style="width: 100%" data-toggle="dropdown" aria-expanded="false" title="&#60; Priority">
+                            ${ticketPriority} <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <t:loop source="priorityEnums" value="priorityP1">
+                                <li>
+                                <t:actionlink t:id="selectPriority" t:context="[ticket.id, priorityP1]" class="label label-${util.getPriorityColor(priorityP1)}">
+                                    ${priorityP1}
+                                </t:actionlink>
+                                </li>
+                            </t:loop>
+                        </ul>
+                    </div>
+                </t:if>
+                <t:if test="!hasPriviligiesToEditStatusPriority">
+                    <div class="btn-group" style="width: 100%; margin-top: 5px;">
+                        <button type="button" class="btn btn-${util.getStatusColor(ticketStatus)} btn-sm data-toggle" style="width: 100%" data-toggle="dropdown" aria-expanded="false" title="&#60; Status">
+                            ${ticketStatus}
+                        </button>
+                    </div><br />
+                    <div class="btn-group" style="width: 100%; margin-top: 5px;">
+                        <button type="button" class="btn btn-${util.getPriorityColor(ticketPriority)} btn-sm data-toggle" style="width: 100%" data-toggle="dropdown" aria-expanded="false" title="&#60; Status">
+                            ${ticketPriority}
+                        </button>
+                    </div>
+                </t:if>                
+                <hr />
+                <h5 style="text-align: center;">Categories</h5>
+                <span class="label label-default" style="display: block; max-width: 100%;">Components</span>
+                <span class="label label-primary" style="display: block; max-width: 100%;">Font End</span>
+                <span class="label label-success" style="display: block; max-width: 100%;">Authentication</span>
+                <span class="label label-danger" style="display: block; max-width: 100%;">Core</span>
+                <hr />
+            </div>
+        </div>
+        <!-- ticket attachments with table -->
+        <div class="row">
+            <div class="col-md-2">
+                <h5 style="font-weight: bold; text-align: right;">Attachments &#62;</h5>
+            </div>
+            <div class="col-md-8">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-halign-center">ID</th>
+                            <th class="text-halign-center">User</th>
+                            <th class="text-halign-center">File Name</th>
+                            <th class="text-halign-center">Date Uploaded</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="">
+                            <td class="text-halign-center text-valign-center">1</td>
+                            <td class="text-halign-center text-valign-center"><a href="">stefanristic1604</a></td>
+                            <td class="text-halign-center text-valign-center"><a href="">example1.cpp</a></td>
+                            <td class="text-halign-center text-valign-center">12-06-2015</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <t:if test="loggedIn">
+            <div class="col-md-2">
+                <br /><br />
+                <button type="button" class="btn btn-default btn-sm btn-default-gradient btn-block">
+                    <span class="glyphicon glyphicon-file" aria-hidden="true"></span> Upload Attachment
+                </button>
+            </div>
+            </t:if>
+        </div>
+        
+        <hr />
+        
+        <!-- comment body -->
+        <t:loop source="ticketComments" value="ticketCommentP1">
+            <div class="row">
+                <div class="col-md-2" style="text-align: center;">
+                    <img class="ticket-page-avatar" src="${context:images/avatars}/${getUserAvatar(ticketCommentP1.userId)}" />
+                    <t:pagelink page="user/View" context="ticketCommentP1.userId"> ${ticketCommentP1.userId.username}</t:pagelink>
+                <br />
+                <span class="glyphicon glyphicon-calendar" style="color: #bbb;"></span> ${util.getDateOrTimeFrom(ticketCommentP1.userId.dateTimeRegistered, 0)}
+                </div>
+                <div class="col-md-8">
+                    <div class="panel panel-default">
+                    <div class="panel-heading">${ticketCommentP1.userId} posted on ${util.getDateOrTimeFrom(ticketCommentP1.dateTimeCreated, 0)}</div>
+                    <div class="panel-body" style="min-height: 125px;">
+                        <t:outputraw value="${getSafeText(ticketCommentP1.text)}" />
+                    </div>
+                    </div>
+                </div>
+                <t:if test="hasPriviligiesToCRD">
+                <div class="col-md-2">
+                    <t:actionlink t:id="editComment" context="ticketCommentP1.id" type="button" class="btn btn-default btn-sm btn-default-gradient btn-block" style="margin-right: 10px;">
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit Comment
+                    </t:actionlink>
+                    <t:actionlink t:id="deleteComment" context="[ticket.id, ticketCommentP1.id]" class="btn btn-default btn-sm btn-default-gradient btn-block"> 
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete Ticket
+                    </t:actionlink>
+                    <hr />
+                </div>
+                </t:if>
+            </div>
+        </t:loop>
+        
+        <t:if test="loggedIn">
+        <hr />
+        <t:form t:id="createComment">
+        <div class="row">
+            <div class="col-md-2">
+                <img class="ticket-page-avatar" src="${context:images/avatars}/${getUserAvatar(loggedInUser)}" />
+                <div style="text-align: center;">
+                    <t:pagelink page="user/View" context="loggedInUser.id"> ${loggedInUser.username}</t:pagelink>
+                <br />
+                <span class="glyphicon glyphicon-calendar" style="color: #bbb;"></span> ${util.getDateOrTimeFrom(loggedInUser.dateTimeRegistered, 0)}
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Comment:<!-- tools bold/italic/font/... --></div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <t:textarea t:id="commentText" class="form-control" validate="required" rows="5" placeholder="Description" />
+                        </div>
+                        <t:submit class="btn btn-default btn-sm btn-default-gradient btn-block" type="button" value="Comment" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+            </div>
+        </div>
+        </t:form>
+        </t:if>
+    </div>
+</html>

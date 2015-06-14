@@ -1,0 +1,11 @@
+<html t:type="layout" title="Not found IssueTracker"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+    <div class="container">
+        <div class="row">
+            <h1 style="text-align: center;">Requested page not found!</h1>
+        </div>
+    </div>
+
+</html>

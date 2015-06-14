@@ -1,0 +1,102 @@
+<html t:type="layout" title="Ticket Title"
+      t:sidebarTitle="Framework Version"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter"> 
+    <t:form t:id="editTicketForm">
+    <div class="container">
+        <div class="row">
+            <div class="input-group col-sm-offset-2 col-sm-8 col-sm-offset-2">
+                <span class="input-group-addon" id="basic-addon1">
+                    <span style="color: #bbb;" class="glyphicon glyphicon-file"></span>
+                </span>
+                <t:textfield t:id="title" validate="required, min=3" placeholder="Title" class="form-control" />
+            </div>
+        </div>        
+    </div>
+
+    <hr />
+
+    <!-- ticket body -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2">
+                <img class="ticket-page-avatar" src="${context:images/avatars}/${getUserAvatar(ticketToEdit.userId)}" />
+                <div style="text-align: center;">
+                    <span class="glyphicon glyphicon-user" style="color: #bbb;"></span>
+                    <t:pagelink page="user/View" context="ticketToEdit.userId.id"> ${ticketToEdit.userId.username}</t:pagelink>
+                    <br />
+                <span class="glyphicon glyphicon-calendar" style="color: #bbb;"></span> ${util.getDateOrTimeFrom(ticketToEdit.userId.dateTimeRegistered, 0)}
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="panel panel-default">
+                <div class="panel-heading">Tools: </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <t:textarea t:id="description" class="form-control" validate="required" rows="5" style="height: 180px;" placeholder="Description" />
+                    </div>
+                    <t:alerts showDismissAll="false" />
+                    <t:submit class="btn btn-default btn-sm btn-default-gradient btn-block" type="button" value="Save Ticket" />
+                </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <!-- new ticket, delete ticket -->
+                <!-- delete ticket if CRD -->
+                <t:pagelink page="ticket/Create" type="button" class="btn btn-default btn-sm btn-default-gradient btn-block"> 
+                    <span class="glyphicon glyphicon-file" aria-hidden="true"></span> New Ticket
+                </t:pagelink>
+                <t:if test="hasPriviligiesToCRD">
+                    <t:actionlink t:id="deleteTicket" context="ticketToEdit.id" class="btn btn-default btn-sm btn-default-gradient btn-block"> 
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete Ticket
+                    </t:actionlink>
+                </t:if>
+                <hr />
+                <div class="btn-group" style="width: 100%">
+                    <t:label for="selectProject"/>:
+                    <t:select t:id="selectProject" value="selectProject" encoder="encoder" model="projectDao.loadAll()" validate="required"
+                              type="button" class="btn btn-default btn-sm data-toggle" style="width: 100%" />
+                </div>
+                <hr />
+                <!-- dispaly to user label and other admin, mod, dev, tester buttons -->
+                <t:if test="hasTicketControlPrivileges">
+                    <div class="btn-group" style="width: 100%">
+                        <t:label for="ticketStatus"/>:
+                        <t:select t:id="ticketStatus" type="button" class="btn btn-default btn-sm data-toggle" style="width: 100%" />
+                    </div><br />
+                    <div class="btn-group" style="width: 100%; margin-top: 5px;"> 
+                        <t:label for="ticketPriority"/>:
+                        <t:select t:id="ticketPriority" type="button" class="btn btn-default btn-sm data-toggle" style="width: 100%" />
+                    </div>
+                </t:if>
+                <t:if test="!hasTicketControlPrivileges">
+                    <div class="btn-group" style="width: 100%">
+                        <t:label for="ticketStatus"/>:
+                        <span class="label label-default" style="display: block; max-width: 100%;">${ticketStatus}</span>
+                    </div><br /><br />
+                    <div class="btn-group" style="width: 100%; margin-top: 5px;"> 
+                        <t:label for="ticketPriority"/>:
+                        <span class="label label-default" style="display: block; max-width: 100%;">${ticketPriority}</span>
+                    </div>
+                </t:if>
+                <hr />
+                <!-- 
+                <div class="btn-group">
+                    <button data-toggle="dropdown" class="btn dropdown-toggle"  data-placeholder="Please select">
+                        Checked option <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><input type="checkbox" id="ID"><label for="ID" name="NAME" value="VALUE">Label</label></li>
+                    </ul>
+                </div>
+                <span class="label label-default" style="display: block; max-width: 100%;">Components</span>
+                <span class="label label-primary" style="display: block; max-width: 100%;">Font End</span>
+                <span class="label label-success" style="display: block; max-width: 100%;">Authentication</span>
+                <span class="label label-danger" style="display: block; max-width: 100%;">Core</span>
+                <hr />
+                -->
+            </div>
+        </div>
+    </div>
+    </t:form>
+</html>

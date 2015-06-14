@@ -1,0 +1,89 @@
+<html t:type="layout" title="Projects"
+      t:sidebarTitle="Framework Version"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter"> 
+    <!-- content header -->
+    <div class="container">
+        <h1 style="float: left; font-size: 20px; margin: 0;">
+            <span class="glyphicon glyphicon-book" style="left: 0; top: 7px; line-height: 32px; margin-top: -10px; color: #bbb; font-size: 1.5em;" aria-hidden="true"></span>
+            <span>&nbsp;</span>
+            <span>
+                <a href="users"><span>Projects</span></a>
+            </span>
+        </h1>          
+    </div>
+
+    <hr />
+
+    <!-- content body -->
+    <div class="container">
+        <form class="form-inline">
+            <div class="form-group">
+              <div class="input-group">
+                  <input type="text" class="form-control input-sm" style="width: 200px;" placeholder="Search Projects" />
+                  <span class="input-group-btn">
+                       <button class="btn btn-default btn-sm btn-default-gradient" type="button">
+                           <i class="glyphicon glyphicon-search"></i>
+                       </button>
+                  </span>
+              </div>
+            </div>
+            <button type="button" class="btn btn-default btn-sm btn-default-gradient" style="margin-left: 5px;">
+                Search Tools <b class="caret"></b>
+            </button>
+            <button type="button" class="btn btn-default btn-sm btn-default-gradient" style="margin-left: 5px;">
+                Clear
+            </button>
+
+            <t:if test="hasPrivileges">
+            <button type="button" class="btn btn-default btn-sm btn-default-gradient pull-right">
+                <span class="glyphicon glyphicon-book" aria-hidden="true"></span> New Project
+            </button>
+            </t:if>
+        </form>
+    </div>
+
+    <br /> <!-- <p style="clear:both;"></p> -->
+
+    <div class="container">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <!-- for different user include desired data for him to see  -->
+                <!-- project > id, user_id, title, description, date_time_created, date_time_modified -->
+                <!-- project-follower > id, project_id, user_id, -->
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Date Created</th>
+                <th>Followers</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- here goes the loop -->
+            <t:loop source="projects" value="projectP1">
+            <tr>
+                <td><t:pagelink page="project/View" context="projectP1.id">${projectP1.id}</t:pagelink></td>
+                <td><t:pagelink page="project/View" context="projectP1.id">${projectP1.title}</t:pagelink></td>
+                <td>${projectP1.description}</td>
+                <td>${projectP1.dateTimeCreated}</td>
+                <td>99</td>
+            </tr>
+            </t:loop>
+        </tbody>
+      </table>
+      <!--
+        <nav>
+            <ul class="pagination">
+                <li><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+                <li><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+            </ul>
+        </nav>
+        -->
+    </div>
+</html>

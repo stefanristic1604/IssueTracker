@@ -1,0 +1,15 @@
+<html t:type="layout" title="Ticket Title"
+      t:sidebarTitle="Framework Version"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter"> 
+    
+    <div class="container">
+        <div class="row">
+            
+        </div>        
+    </div>
+    
+    <hr />
+    
+    
+</html>

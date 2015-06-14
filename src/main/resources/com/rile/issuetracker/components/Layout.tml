@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+    <head>
+        <meta charset="utf-8" />
+        <title>${title}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="Issue Tracker System" />
+        <meta name="author" content="Stefan Ristic" />
+        <link rel="shortcut icon" href="${context:/favicon.ico}" />
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+    </head>
+
+    <body>
+        
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <t:pagelink class="navbar-brand" page="tracker">Issue Tracker</t:pagelink>
+                <div class="collapse navbar-collapse" id="navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li><t:pagelink page="tracker"><span class="glyphicon glyphicon-home"></span> Tracker</t:pagelink></li>
+                        <li class="dropdown">
+                            <t:pagelink page="projects" data-toggle="dropdown" class="dropdown-toggle disabled">
+                                <span class="glyphicon glyphicon-book"></span> Projects <b class="caret"></b>
+                            </t:pagelink>
+                            <ul class="dropdown-menu">
+                                <t:if test="hasPermissionToCreateNewProject">
+                                    <li><t:pagelink page="project/create">New Project</t:pagelink></li>
+                                    <li class="divider"></li>
+                                </t:if>
+                                <t:loop source="projectList" value="project">
+                                    <li><t:pagelink page="project/view" context="project.id">${project.title}</t:pagelink></li>
+                                </t:loop>
+                            </ul>
+                        </li>
+                        <li><t:pagelink page="users"><span class="glyphicon glyphicon-user"></span> Users</t:pagelink></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <t:actionlink t:id="ChooseLanguage" data-toggle="dropdown" class="dropdown-toggle">
+                                Choose Language <b class="caret"></b>
+                            </t:actionlink>
+                            <ul class="dropdown-menu">
+                                <li><a href="">Serbian</a></li>
+                                <li><a href="">English</a></li>
+                                <li><a href="">Germany</a></li>
+                            </ul>
+                        </li>
+                        <t:if test="!loggedIn">
+                            <li><t:pagelink page="login"><span class="glyphicon glyphicon-log-in"></span> Login</t:pagelink></li>
+                            <li><t:pagelink page="register"><span class="glyphicon glyphicon-pencil"></span> Register</t:pagelink></li>
+                        </t:if>
+                        <t:if test="loggedIn">
+                            <li class="dropdown">
+                                <t:pagelink page="user/view" context="${loggedInUser.id}" data-toggle="dropdown" class="dropdown-toggle">
+                                    <img src="${context:images/avatars}/${loggedInUser.avatarpath}" 
+                                         style="vertical-align: sub; width: 15px; height: 15px;" /> 
+                                    ${loggedInUser.username} <b class="caret"></b>
+                                </t:pagelink>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <t:pagelink page="user/controlpanel/${loggedInUser.role}"> 
+                                        <span class="glyphicon glyphicon-tasks"></span> 
+                                        Control Panel
+                                        </t:pagelink>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li><t:pagelink page="user/view" context="loggedInUser.id"><span class="glyphicon glyphicon-user"></span> View Profile</t:pagelink></li>
+                                    <li><t:pagelink page="user/edit" context="loggedInUser.id"><span class="glyphicon glyphicon-user"></span> Edit Profile</t:pagelink></li>
+                                    <li class="divider"></li>
+                                    <li>
+                                    <t:actionlink t:id="logout">
+                                        <span class="glyphicon glyphicon-log-out"></span> Logout
+                                    </t:actionlink>
+                                    </li>
+                                </ul>
+                            </li>
+
+                        </t:if>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        
+        <t:body />
+        
+        <hr />
+        
+        <footer style="text-align: center;">
+            <div class="container">
+                <p>&copy; Rile 2015</p>
+            </div>
+        </footer>
+        <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>-->
+        <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>-->
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    </body>
+</html>

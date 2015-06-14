@@ -1,0 +1,87 @@
+<html t:type="layout" title="Users"
+      t:sidebarTitle="Framework Version"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter"> 
+    <!-- content header -->
+    <div class="container">
+        <h1 style="float: left; font-size: 20px; margin: 0;">
+            <span class="glyphicon glyphicon-user" style="left: 0; top: 7px; line-height: 32px; margin-top: -10px; color: #bbb; font-size: 1.5em;" aria-hidden="true"></span>
+            <span>&nbsp;</span>
+            <span>
+                <a href="users"><span>Users</span></a>
+            </span>
+        </h1>          
+    </div>
+
+    <hr />
+
+    <!-- content body -->
+    <div class="container">
+        <form class="form-inline">
+            <div class="form-group">
+              <div class="input-group">
+                  <input type="text" class="form-control input-sm" style="width: 200px;" placeholder="Search Users" />
+                  <span class="input-group-btn">
+                       <button class="btn btn-default btn-sm btn-default-gradient" type="button">
+                           <i class="glyphicon glyphicon-search"></i>
+                       </button>
+                  </span>
+              </div>
+            </div>
+            <button type="button" class="btn btn-default btn-sm btn-default-gradient" style="margin-left: 5px;">
+                Search Tools <b class="caret"></b>
+            </button>
+            <button type="button" class="btn btn-default btn-sm btn-default-gradient" style="margin-left: 5px;">
+                Clear
+            </button>
+            <t:if test="hasPrivileges">
+            <button type="button" class="btn btn-default btn-sm btn-default-gradient pull-right">
+                <span class="glyphicon glyphicon-user" aria-hidden="true"></span> New User
+            </button>
+            </t:if>
+        </form>
+    </div>
+
+    <br /> <!-- <p style="clear:both;"></p> -->
+
+    <div class="container">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <!-- for different user include specific data for him to see  -->
+                <!-- id, username, password, first_name, last_name, email, role, avatar_path, date_time_registered -->
+                <th>ID</th>
+                <th>Username</th>
+                <th>First &amp; Last Name</th>
+                <th>Email</th>
+                <th>Role</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- here goes the loop -->
+            <t:loop source="users" value="userP1">
+            <tr>
+                <td><t:pagelink page="user/View" context="userP1.id">${userP1.id}</t:pagelink></td>
+                <td><t:pagelink page="user/View" context="userP1.id">${userP1.username}</t:pagelink></td>
+                <td>${userP1.firstName} ${userP1.lastName}</td>
+                <td>${userP1.email}</td>
+                <td>${userP1.role}</td>
+            </tr>
+            </t:loop>
+        </tbody>
+      </table>
+      <!--
+        <nav>
+            <ul class="pagination">
+                <li><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+                <li><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+            </ul>
+        </nav>
+        -->
+    </div>
+</html>

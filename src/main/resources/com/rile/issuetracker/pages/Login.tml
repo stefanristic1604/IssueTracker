@@ -1,0 +1,24 @@
+<html t:type="layout" title="Login"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+    <div class="container">
+        <div class="col-md-4"></div>
+        <t:form t:id="loginForm" class="col-md-4">
+            <h2 style="text-align: center;">Login</h2>
+            <hr />
+            <t:alerts showDismissAll="false" />
+            <div class="form-group">
+                <t:textfield t:id="username" validate="required" class="form-control" placeholder="Username" />
+            </div>
+            <div class="form-group">
+                <t:passwordfield t:id="password" validate="required" class="form-control" placeholder="Password" />
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6 col-sm-offset-4">
+                    <t:submit class="btn btn-default btn-md btn-default-gradient" type="button" value="Login" />
+                </div>
+            </div>
+        </t:form>
+        <div class="col-md-4"></div>
+    </div>  
+</html>

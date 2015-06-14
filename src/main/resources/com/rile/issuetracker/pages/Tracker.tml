@@ -1,0 +1,173 @@
+<html t:type="layout" title="${message:page-name}"
+      t:sidebarTitle="Framework Version"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter"> 
+    <head>
+        <script>
+        $(document).ready(function(){
+            $("#search-tools-btn").click(function(){
+                $("#search-tools").slideToggle();
+            });
+        });
+        </script>
+    </head>
+    <!-- content header -->
+    <div class="container">
+        <h1 class="entry-title public" style="float: left; font-size: 20px; margin: 0;">
+            <span class="glyphicon glyphicon-book" style="left: 0; top: 7px; line-height: 32px; margin-top: -10px; color: #bbb; font-size: 1.5em;" aria-hidden="true"></span>
+            <span>&nbsp;</span>
+            <span class="dropdown">
+                <t:pagelink page="tracker" data-toggle="dropdown" class="dropdown-toggle disabled" style="padding-top: 5px; padding-bottom: 5px;">
+                    <span>
+                        <b class="caret"></b>
+                        <t:if test="!project"> All Tickets</t:if>
+                        <t:if test="project"> Project</t:if>
+                    </span>
+                </t:pagelink>
+                <ul class="dropdown-menu">
+                    <li>                    
+                        <t:pagelink page="tracker" data-toggle="dropdown" class="dropdown-toggle disabled">
+                        <span>All Tickets</span>
+                        </t:pagelink>
+                    </li>
+                    <t:loop source="projectList" value="projectP1">
+                        <li><t:pagelink page="tracker" context="${projectP1.id}">${projectP1.title}</t:pagelink></li>
+                    </t:loop>
+                </ul>
+            </span>
+            <t:if test="project">
+                <span class="path-divider"> > </span>
+                <strong>
+                    <t:pagelink page="tracker" context="project.id">
+                        <span>${project.title}</span>
+                    </t:pagelink>
+                </strong>
+            </t:if>
+        </h1>
+        <t:if test="project">
+        <ul class="header-actions" style="float: right; margin: 0 -10px 0 0;">
+            <t:if test="loggedIn">
+            <li>
+                <div class="btn-group">
+                    <t:actionlink t:id="followProject" t:context="project.id" class="btn btn-default btn-sm btn-default-gradient ${getActiveFor('userFollowingProject')}">
+                        <span class="glyphicon glyphicon-star"></span>
+                        <t:if test="projectFollower"> Unfollow</t:if> 
+                        <t:if test="!projectFollower"> Follow</t:if> 
+                    </t:actionlink>
+                    <t:actionlink class="btn btn-default btn-sm text-hover">
+                        <span>${projectFollowerDao.getFollowerCountByProjectId(project.id)}</span>
+                    </t:actionlink>
+                </div>
+            </li>
+            </t:if>
+        </ul>            
+        </t:if>
+    </div>
+
+    <hr />
+
+    <!-- content body -->
+    <t:form t:id="searchForm" >
+    <div class="container">
+        <!-- search -->
+        <form class="form-inline">
+            <div class="input-group">
+                <t:textfield t:id="searchByTicket" placeholder="Search by Title..." 
+                            type="input" class="form-control input-sm" style="width: 200px;" />
+                <span class="input-group-btn" style="float: left;">
+                <t:submit type="button" class="btn btn-default btn-sm btn-default-gradient" value="Search"/>
+                <!-- 
+                <button class="btn btn-default btn-sm btn-default-gradient" type="button">
+                    <i class="glyphicon glyphicon-search"></i>
+                </button>
+                -->
+                </span>
+                <button type="button" class="btn btn-default btn-sm btn-default-gradient" id="search-tools-btn" style="margin-left: 65px;">
+                    Search Tools <b class="caret"></b>
+                </button>
+                <t:actionlink t:id="searchClear" type="button" class="btn btn-default btn-sm btn-default-gradient" style="margin-left: 5px;">
+                    Clear
+                </t:actionlink>
+            </div>         
+        </form>       
+        <!-- search tools -->
+        <form class="form-inline" style="margin-top: 10px;" id="search-tools">
+            <div class="form-group">
+                <div class="input-group">
+                    <t:textfield t:id="searchByCreator" class="form-control input-sm" style="width: 200px;" placeholder="By Creator" />
+                </div>
+            </div>
+            <t:select t:id="searchByProject" value="searchByProject" model="projectList" encoder="encoder" 
+                      type="button" class="btn btn-default btn-sm data-toggle" style="margin-left: 5px; height: 30px;"
+                      blankLabel="By Project..."
+            />
+            <t:select t:id="searchByStatus" value="searchByStatus" 
+                      type="button" class="btn btn-default btn-sm data-toggle" style="margin-left: 5px; height: 30px;" 
+                      blankLabel="By Status..."
+            />
+            <t:select t:id="searchByPriority" value="searchByPriority" 
+                      type="button" class="btn btn-default btn-sm data-toggle" style="margin-left: 5px; height: 30px;"
+                      blankLabel="By Priority..."
+            />
+        </form>
+    </div>
+    </t:form>
+    <br /> <!-- <p style="clear:both;"></p> -->
+
+    <div class="container">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th width="5%" class="text-halign-center">ID</th>
+                <t:if test="loggedIn"><th width="5%" class="text-halign-center">Follow</th></t:if>
+                <th>Summary</th>
+                <th width="5%" class="text-halign-center">Priority</th>
+                <th width="5%" class="text-halign-center">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <t:loop source="ticketList" value="ticketP1">
+                <tr class=""><!-- if a ticket is solved -->
+                    <td class="text-halign-center text-valign-center">${ticketP1.id}</td>
+                    <t:if test="loggedIn">
+                    <td class="text-halign-center text-valign-center">
+                        <a class="${getActiveFor('userFollowingTicket')}"><span class="glyphicon glyphicon-star"></span></a>
+                    </td>
+                    </t:if>
+                    <td class="table-td-context">
+                        <t:pagelink page="ticket/view" context="ticketP1.id" style="font-size: 18px; font-weight: bold;">
+                            ${ticketP1.title}
+                        </t:pagelink><br />
+                        <span class="table-ticket-details">
+                            Project <t:pagelink page="tracker" context="ticketP1.projectId">${ticketP1.projectId.title}</t:pagelink> •
+                            Categories <a href="">${ticketP1.categories}</a>
+                        </span><br />
+                        <span class="table-ticket-details">
+                            Created by <t:pagelink page="user/view" context="ticketP1.userId">${ticketP1.userId.username}</t:pagelink> • 
+                            Opened ${util.getDateOrTimeFrom(ticketP1.dateTimeCreated, 0)} • 
+                            Modified ${util.getDateOrTimeFrom(ticketP1.dateTimeModified, 0)}
+                        </span>
+                    </td>
+                    <td class="text-halign-center text-valign-center">
+                        <span class="label label-${util.getPriorityColor(ticketP1.priority)}">${ticketP1.priority}</span>
+                    </td>
+                    <td class="text-halign-center text-valign-center">
+                        <span class="label label-${util.getStatusColor(ticketP1.status)}">${ticketP1.status}</span>
+                    </td>
+                </tr>
+            </t:loop>
+        </tbody>
+      </table>
+    <nav>
+        <!--
+        <ul class="pagination">
+        <li><t:actionlink t:id="previous" aria-label="Previous"><span aria-hidden="true">&laquo;</span></t:actionlink></li>
+        <t:loop source="" value="">
+            <li><a href="#">${var:index}</a></li>
+        </t:loop>
+        <li><t:actionlink t:id="next" aria-label="Next"><span aria-hidden="true">&raquo;</span></t:actionlink></li>
+        </ul>
+        -->
+    </nav>
+    </div>
+</html>
