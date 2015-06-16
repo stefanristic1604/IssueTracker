@@ -5,10 +5,9 @@ import com.rile.issuetracker.entities.Role;
 import com.rile.issuetracker.entities.Ticket;
 import com.rile.issuetracker.entities.TicketPriority;
 import com.rile.issuetracker.entities.TicketStatus;
-import com.rile.issuetracker.entities.User;
-import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
@@ -41,25 +40,30 @@ public class TicketDaoImpl extends GenericDaoImpl<Ticket> implements TicketDao {
     }
 
     @Override
-    public List<Ticket> findlTicketsBy(
+    public List<Ticket> findTicketsBy(
             String title, String userData,
             Project project, TicketStatus status, TicketPriority priority) {
         
         Criteria criteria = session.createCriteria(classType);
-     
+        
         if (title != null && !title.isEmpty()) { 
-            title = title.toLowerCase();
-            criteria.add(Restrictions.like("title", title + "%"));
+            title = title.toLowerCase().trim();
+            criteria.add(Restrictions.like("title", "%" + title + "%"));
         }
         if (userData != null && !userData.isEmpty()) {
-            userData = userData.toLowerCase();
-            criteria.add(Restrictions.disjunction()
-                .add(Restrictions.like("userId.firstName", userData + "%"))
-                .add(Restrictions.like("userId.lastName", userData + "%"))
-                .add(Restrictions.like("userId.email", userData + "%"))
-                .add(Restrictions.like("userId.username", userData + "%"))
-                .add(Restrictions.like("userId.role", userData + "%"))
-            );
+            userData = userData.toLowerCase().trim();
+            criteria.createAlias("userId", "user");
+            Disjunction disj = Restrictions.disjunction();
+            disj.add(Restrictions.like("user.firstName", "%" + userData + "%"));
+            disj.add(Restrictions.like("user.lastName", "%" + userData + "%"));
+            disj.add(Restrictions.like("user.email", "%" + userData + "%"));
+            disj.add(Restrictions.like("user.username", "%" + userData + "%"));
+            for (Role role : Role.values()) {
+                if (role.name().contains(userData)) {
+                    disj.add(Restrictions.eq("user.role", role));
+                } 
+            }
+            criteria.add(disj);
         }
         if (project != null) {
             criteria.add(Restrictions.eq("projectId.id", project.getId()));
@@ -70,6 +74,7 @@ public class TicketDaoImpl extends GenericDaoImpl<Ticket> implements TicketDao {
         if (priority != null) {
             criteria.add(Restrictions.eq("priority", priority));
         }
+        criteria.addOrder(Order.desc("id"));
         return criteria.list();
     }
     

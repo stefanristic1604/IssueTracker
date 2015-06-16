@@ -88,13 +88,27 @@ public class Tracker {
     void onActivate() {
         if (project == null) {
             projectList = projectDao.loadAll();
-            ticketList = ticketDao.loadAll();
+            if (!wasSearchInvoked) {
+                ticketList = ticketDao.loadAll();
+            } else {
+                ticketList = ticketDao.findTicketsBy(
+                    searchByTicket, searchByCreator, searchByProject, searchByStatus, searchByPriority
+                );
+                wasSearchInvoked = false;
+            }
         }
     }
     
     void onActivate(Integer projectId) {        
         project = projectDao.getByID(projectId);
-        ticketList = ticketDao.getTicketsByProjectID(project.getId());
+        if (!wasSearchInvoked) {
+            ticketList = ticketDao.getTicketsByProjectID(project.getId());
+        } else {
+            ticketList = ticketDao.findTicketsBy(
+                searchByTicket, searchByCreator, project, searchByStatus, searchByPriority
+            );
+            wasSearchInvoked = false;
+        }
     }
    
     public ProjectFollower getProjectFollower() {
@@ -118,11 +132,13 @@ public class Tracker {
     
     void onValidateFromSearchForm() {}
     
+    @Property
+    @Persist
+    private boolean wasSearchInvoked;
+    
     @CommitAfter
     Object onSuccessFromSearchForm() {
-        ticketList = ticketDao.findlTicketsBy(
-            searchByTicket, searchByCreator, searchByProject, searchByStatus, searchByPriority
-        );
+        wasSearchInvoked = true;
         return null;
     }
 

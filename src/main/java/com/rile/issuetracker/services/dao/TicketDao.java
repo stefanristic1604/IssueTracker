@@ -15,7 +15,7 @@ public interface TicketDao extends GenericDao<Ticket> {
     List<Ticket> getTicketsByProjectID(Integer projectID);
     List<Ticket> getTicketsByTitle(String title); 
     List<Ticket> loadAllTicketsFromTo(int from);
-    List<Ticket> findlTicketsBy(
+    List<Ticket> findTicketsBy(
         String title, String userData, 
         Project project, TicketStatus status, TicketPriority priority
     );
