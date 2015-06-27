@@ -142,7 +142,7 @@
                     </td>
                     </t:if>
                     <td class="table-td-context">
-                        <t:pagelink page="ticket/view" context="ticketP1.id" style="font-size: 18px; font-weight: bold;">
+                        <t:pagelink page="ticket/view" context="${ticketP1.id}" style="font-size: 18px; font-weight: bold;">
                             ${ticketP1.title}
                         </t:pagelink><br />
                         <span class="table-ticket-details">

@@ -1,8 +1,38 @@
-<html t:type="layout" title="View User"
+<html t:type="layout" title="Edit User"
       t:sidebarTitle="Framework Version"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter"> 
     <div class="container">
-        
-    </div>
+        <div class="col-md-4"></div>
+        <t:form t:id="editForm" class="col-md-4">
+            <h2 style="text-align: center;">Edit User</h2>
+            <hr />
+            <t:errors />
+            <t:alerts showDismissAll="false" />
+            <div class="form-group">
+                <t:textfield t:id="firstName" validate="required" placeholder="First Name" class="form-control" />
+            </div>
+            <div class="form-group">
+                <t:textfield t:id="lastName" validate="required" placeholder="Last Name" class="form-control" />
+            </div>
+            <div class="form-group">
+                <t:textfield t:id="email" validate="required, email" placeholder="Email Address" class="form-control" />
+            </div>
+            <div class="form-group">
+                <t:textfield t:id="username" validate="required" placeholder="Username" class="form-control" />
+            </div>
+            <div class="form-group">
+                <t:passwordfield t:id="password" validate="required, min=3" placeholder="Password" class="form-control"  />
+            </div>
+            <div class="form-group">
+                <t:passwordfield t:id="confirmPassword" validate="required, min=3" placeholder="Confirm Password" class="form-control"  />
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6 col-sm-offset-4">
+                    <t:submit class="btn btn-default btn-md btn-default-gradient" type="button" value="Confirm" />
+                </div>
+            </div>
+        </t:form>
+        <div class="col-md-4"></div>
+    </div>  
 </html>

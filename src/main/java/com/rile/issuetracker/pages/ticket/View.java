@@ -95,8 +95,14 @@ public class View {
                 "user-avatar.png" : user.getAvatarPath();
     }
     
-    public boolean getHasPriviligiesToCRD() {
+    public boolean getHasPriviligiesToCRDTicket() {
         return (getLoggedIn() && loggedInUser.getId().equals(ticket.getUserId().getId())) ||
+               loggedInUser.getRole() == Role.Admin || 
+               loggedInUser.getRole() == Role.Moderator;
+    }
+    
+    public boolean getHasPriviligiesToCRDComment() {
+        return (getLoggedIn() && loggedInUser.getId().equals(ticketCommentP1.getUserId().getId())) ||
                loggedInUser.getRole() == Role.Admin || 
                loggedInUser.getRole() == Role.Moderator;
     }

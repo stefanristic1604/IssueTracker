@@ -23,6 +23,13 @@ public class TicketDaoImpl extends GenericDaoImpl<Ticket> implements TicketDao {
                     .add(Restrictions.eq("projectId.id", projectID))
                     .addOrder(Order.desc("id")).list();
     }
+
+    @Override
+    public List<Ticket> getTicketsPostedByUserID(Integer userId) {
+        return session.createCriteria(classType)
+                .add(Restrictions.eq("userId.id", userId))
+                .addOrder(Order.desc("id")).list();
+    }
     
     @Override
     public List<Ticket> getTicketsByTitle(String title) {

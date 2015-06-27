@@ -1,6 +1,7 @@
 package com.rile.issuetracker.services.dao;
 
 import com.rile.issuetracker.entities.ProjectFollower;
+import java.util.List;
 import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -26,5 +27,10 @@ public class ProjectFollowerDaoImpl extends GenericDaoImpl<ProjectFollower> impl
                 .add(Restrictions.eq("projectId.id", projectId))
                 .uniqueResult();
     }
-    
+
+    @Override
+    public List<ProjectFollower> getByUserId(Integer userId) {
+        return session.createCriteria(classType)
+                .add(Restrictions.eq("userId.id", userId)).list();
+    }
 }

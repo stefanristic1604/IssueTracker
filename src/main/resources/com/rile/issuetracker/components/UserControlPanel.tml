@@ -1,0 +1,69 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" 
+      xmlns:p="tapestry:parameter">
+    <t:content> 
+        <div class="container">
+            <div class="row">
+                <h3 style="text-align: center; color: #337ab7;">Posted Tickets</h3><br />
+                <t:grid source="postedTickets" class="table table-hover"
+                    exclude="description, categories, dateTimeModified" 
+                    add="edit,delete"
+                    reorder="id, title, status, priority, views, dateTimeCreated, edit, delete"
+                    row="ticketPostedP1">
+                    <p:titleCell>
+                        <t:pagelink page="ticket/View" context="ticketPostedP1">${ticketPostedP1.title}</t:pagelink>
+                    </p:titleCell>
+                    <p:editCell>
+                        <t:pagelink page="ticket/Edit" context="ticketPostedP1">Edit</t:pagelink>
+                    </p:editCell>
+                    <p:deleteCell>
+                        <t:actionlink t:id="deleteTicket" context="ticketPostedP1">Delete</t:actionlink>
+                    </p:deleteCell>
+                </t:grid>
+            </div>
+            <hr />
+            <div class="row">
+                <h3 style="text-align: center; color: #337ab7;">Following Tickets</h3><br />
+                <t:grid source="followingTickets" class="table table-hover"
+                    exclude="description, categories, dateTimeModified" 
+                    add="follow"
+                    reorder="id, title, status, priority, views, dateTimeCreated, follow"
+                    row="ticketFollowerP1">
+                    <p:followCell>
+                        <t:actionlink t:id="followTicket" context="ticketFollowerP1">
+                            <!--
+                            <t:if test="!getTicketFollower(ticketFollowerP1)">Follow</t:if>
+                            <t:if test="getTicketFollower(ticketFollowerP1)">Unfollow</t:if>
+                            -->                            
+                            <!--<a class="${getActiveFor('userFollowingTicket')}"><span class="glyphicon glyphicon-star"></span></a>-->
+                            Unfollow
+                        </t:actionlink>
+                    </p:followCell>
+                    <p:titleCell>
+                        <t:pagelink page="ticket/View" context="ticketFollowerP1">${ticketFollowerP1.title}</t:pagelink>
+                    </p:titleCell>
+                </t:grid>
+            </div>
+            <hr />
+            <div class="row">
+                <h3 style="text-align: center; color: #337ab7;">Following Projects</h3><br />
+                <t:grid source="followingProjects" class="table table-hover"
+                    exclude="description, views, dateTimeModified" 
+                    add="follow, delete"  
+                    reorder="id, title, dateTimeCreated, follow"
+                    row="projectFollowerP1">
+                    <p:followCell>
+                        <t:actionlink t:id="followProject" context="projectFollowerP1">
+                            Unfollow
+                        </t:actionlink>
+                    </p:followCell>
+                    <p:titleCell>
+                        <t:pagelink page="project/View" context="projectFollowerP1">${projectFollowerP1.title}</t:pagelink>
+                    </p:titleCell>
+                    <p:deleteCell>
+                        <t:actionlink t:id="deleteProject" context="projectFollowerP1">Delete</t:actionlink>
+                    </p:deleteCell>
+                </t:grid>
+            </div>
+        </div>
+    </t:content>
+</html>

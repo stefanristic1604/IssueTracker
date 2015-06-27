@@ -1,6 +1,7 @@
 package com.rile.issuetracker.services.dao;
 
 import com.rile.issuetracker.entities.TicketFollower;
+import java.util.List;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
@@ -23,6 +24,12 @@ public class TicketFollowerDaoImpl extends GenericDaoImpl<TicketFollower> implem
         return (TicketFollower) session.createCriteria(classType)
             .add(Restrictions.eq("userId.id", userId))
             .add(Restrictions.eq("ticketId.id", ticketId)).uniqueResult();
+    }
+
+    @Override
+    public List<TicketFollower> getByUserId(Integer userId) {
+        return session.createCriteria(classType)
+                .add(Restrictions.eq("userId.id", userId)).list();
     }
     
 }

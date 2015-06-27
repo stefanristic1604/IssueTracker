@@ -7,6 +7,7 @@
             <span class="glyphicon glyphicon-file" style="left: 0; top: 7px; line-height: 32px; margin-top: -10px; color: #bbb; font-size: 1.5em;" aria-hidden="true"></span>
             <span>&nbsp;</span>
             <span>
+                <a name="#ticket-id-${ticket.id}"></a>
                 <t:pagelink page="ticket/View" context="${ticket.id}"><span>[#${ticket.id}] ${ticket.title}</span></t:pagelink>
             </span>
         </h1>          
@@ -62,7 +63,7 @@
                     <t:pagelink page="ticket/Create" type="button" class="btn btn-default btn-sm btn-default-gradient btn-block"> 
                         <span class="glyphicon glyphicon-file" aria-hidden="true"></span> New Ticket
                     </t:pagelink>
-                    <t:if test="hasPriviligiesToCRD">
+                    <t:if test="hasPriviligiesToCRDTicket">
                     <t:pagelink page="ticket/Edit" context="ticket.id" type="button" class="btn btn-default btn-sm btn-default-gradient btn-block"> 
                         <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit Ticket
                     </t:pagelink>
@@ -72,7 +73,7 @@
                     </t:if>
                     <hr />
                 </t:if>
-                <t:if test="hasPriviligiesToCRD">
+                <t:if test="hasPriviligiesToCRDTicket">
                     <div class="btn-group" style="width: 100%">
                         <button type="button" class="btn btn-default btn-sm data-toggle" style="width: 100%" data-toggle="dropdown" aria-expanded="false" title="&#60; Project">
                             <span class="glyphicon glyphicon-book" aria-hidden="true"></span> ${ticket.projectId.title} <span class="caret"></span>
@@ -88,7 +89,7 @@
                         </ul>
                     </div>
                 </t:if>
-                <t:if test="!hasPriviligiesToCRD">
+                <t:if test="!hasPriviligiesToCRDTicket">
                     <div class="btn-group" style="width: 100%">
                         <button type="button" class="btn btn-default btn-sm data-toggle" style="width: 100%" data-toggle="dropdown" aria-expanded="false" title="&#60; Project">
                             <span class="glyphicon glyphicon-book" aria-hidden="true"></span> ${ticket.projectId.title}
@@ -165,12 +166,14 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <!--
                         <tr class="">
                             <td class="text-halign-center text-valign-center">1</td>
                             <td class="text-halign-center text-valign-center"><a href="">stefanristic1604</a></td>
                             <td class="text-halign-center text-valign-center"><a href="">example1.cpp</a></td>
                             <td class="text-halign-center text-valign-center">12-06-2015</td>
                         </tr>
+                        -->
                     </tbody>
                 </table>
             </div>
@@ -203,7 +206,7 @@
                     </div>
                     </div>
                 </div>
-                <t:if test="hasPriviligiesToCRD">
+                <t:if test="hasPriviligiesToCRDComment">
                 <div class="col-md-2">
                     <t:actionlink t:id="editComment" context="ticketCommentP1.id" type="button" class="btn btn-default btn-sm btn-default-gradient btn-block" style="margin-right: 10px;">
                         <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit Comment
@@ -221,6 +224,7 @@
         <hr />
         <t:form t:id="createComment">
         <div class="row">
+            <a name="new-comment"></a>
             <div class="col-md-2">
                 <img class="ticket-page-avatar" src="${context:images/avatars}/${getUserAvatar(loggedInUser)}" />
                 <div style="text-align: center;">

@@ -100,6 +100,7 @@ public class Create {
         newTicket.setPriority(ticketPriority);
         newTicket.setCategories(selectProject.getTitle());
         newTicket.setDateTimeCreated(new Date());
+        newTicket.setViews(0);
         Ticket createdTicket = ticketDao.merge(newTicket);
         if (createdTicket != null) {
             return renderLinkSource.createPageRenderLinkWithContext("ticket/View", createdTicket.getId());

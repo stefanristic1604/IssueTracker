@@ -1,0 +1,19 @@
+<html t:type="layout" title="Architect Panel"
+      t:sidebarTitle="Framework Version"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter"> 
+    
+    <div class="container">
+        <h1 class="entry-title public" style="float: left; font-size: 20px; margin: 0;">
+            <span class="glyphicon glyphicon-user" style="left: 0; top: 7px; line-height: 32px; margin-top: -10px; color: #bbb; font-size: 1.5em;" aria-hidden="true"></span>
+            Architect Control Panel
+        </h1>
+    </div>
+    
+    <hr />
+    
+    <div class="container">
+        <t:UserControlPanel />
+        <hr />
+    </div>
+</html>

@@ -1,15 +1,58 @@
-<html t:type="layout" title="Ticket Title"
+<html t:type="layout" title="Admin Panel"
       t:sidebarTitle="Framework Version"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter"> 
     
     <div class="container">
-        <div class="row">
-            
-        </div>        
+        <h1 class="entry-title public" style="float: left; font-size: 20px; margin: 0;">
+            <span class="glyphicon glyphicon-user" style="left: 0; top: 7px; line-height: 32px; margin-top: -10px; color: #bbb; font-size: 1.5em;" aria-hidden="true"></span>
+            Admin Control Panel
+        </h1>
     </div>
     
     <hr />
     
-    
+    <div class="container">
+        <t:UserControlPanel />
+        <hr />
+        <div class="row">
+            <h3 style="text-align: center; color: #337ab7;">Users</h3><br />
+            <t:grid source="users" class="table table-hover"
+                    exclude="avatarPath, password, " 
+                    add="edit, delete"  
+                    reorder="id, username, firstName, lastName, email, role, edit, delete, dateTimeRegistered"
+                    row="userP1">
+                    <p:roleCell>
+                        <!-- change role combobox -->
+                        <!--
+                        <t:select t:id="userRoleP1" value="userRoleP1" model="roleEnums"
+                          type="button" class="btn btn-default btn-sm data-toggle" style=""
+                        />-->
+                        <div class="btn-group" style="width: 100%;">
+                        <button type="button" style="width: 100%;" class="btn btn-default btn-sm data-toggle" data-toggle="dropdown" aria-expanded="false">
+                            ${userP1.role} <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <t:loop source="roleEnums" value="userRoleP1">
+                                <li>
+                                <t:actionlink t:id="changeRole" t:context="[userP1, userRoleP1]">
+                                    ${userRoleP1}
+                                </t:actionlink>
+                                </li>
+                            </t:loop>
+                        </ul>
+                        </div>
+                    </p:roleCell>
+                    <p:usernameCell>
+                        <t:pagelink page="user/View" context="userP1">${userP1.username}</t:pagelink>
+                    </p:usernameCell>
+                    <p:editCell>
+                        <t:pagelink page="user/Edit" context="userP1">Edit</t:pagelink>
+                    </p:editCell>    
+                    <p:deleteCell>
+                        <t:actionlink t:id="deleteUser" context="userP1">Delete</t:actionlink>
+                    </p:deleteCell>
+            </t:grid>
+        </div>
+    </div>
 </html>

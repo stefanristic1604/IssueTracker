@@ -13,6 +13,7 @@ import java.util.List;
 public interface TicketDao extends GenericDao<Ticket> {
     
     List<Ticket> getTicketsByProjectID(Integer projectID);
+    List<Ticket> getTicketsPostedByUserID(Integer userId);
     List<Ticket> getTicketsByTitle(String title); 
     List<Ticket> loadAllTicketsFromTo(int from);
     List<Ticket> findTicketsBy(
